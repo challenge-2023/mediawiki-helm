@@ -13,24 +13,6 @@ spec:
       labels:
         app: mariadb
     spec:
-      initContainers:
-      - name: download-backup
-        image: alpine:3.12
-        command:
-        - sh
-        - -c
-        - |
-          set -x
-          apk add --no-cache curl
-          apk add --no-cache curl mysql-client
-          curl -L -o mediawiki.sql  "https://drive.google.com/uc?export=download&id=1pnan6QBDVM4MsRVJC3KRZvfBBiDGAgOj"
-          mysql -u root -p$MYSQL_ROOT_PASSWORD < mediawiki.sql
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mariadb-root-password
-              key: MYSQL_ROOT_PASSWORD
       containers:
       - name: mariadb
         image: mariadb:10.5
@@ -47,12 +29,12 @@ spec:
         - name: mariadb-data
           mountPath: /var/lib/mysql
       - name: backup-restore
-        image: busybox
+        image: mariadb:10.5
         command:
         - sh
         - -c
         - |
-          apk add --no-cache curl mysql-client
+          apk add --no-cache curl
           until mysqladmin ping -h localhost --silent; do
             echo "Waiting for MariaDB to start..."
             sleep 5
