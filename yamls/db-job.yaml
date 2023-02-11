@@ -7,6 +7,7 @@ spec:
     metadata:
       name: backup-job
     spec:
+      restartPolicy: Never
       containers:
       - name: backup-restore
         image: mariadb
