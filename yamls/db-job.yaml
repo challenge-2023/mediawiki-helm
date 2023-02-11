@@ -29,4 +29,4 @@ spec:
               name: mariadb-secret
               key: mariadb-root-password
 
-  backoffLimit: 4
+  backoffLimit: 2
