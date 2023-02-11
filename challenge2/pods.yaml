@@ -14,11 +14,61 @@ spec:
         memory: "400Mi"
         cpu: "200m"
     image: mediawiki
-    command: ["/bin/sh", "-c", "cat /etc/csv/myfile.csv"]
-    volumeMounts:
-    - name: csv-volume
-      mountPath: /etc/csv
-  volumes:
-  - name: csv-volume
-    configMap:
-      name: my-csv-file
+##    command: ["/bin/sh", "-c", "cat /etc/csv/myfile.csv"]
+#    volumeMounts:
+#    - name: csv-volume
+#      mountPath: /etc/csv
+#  volumes:
+#  - name: csv-volume
+#    configMap:
+#      name: my-csv-file
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-b
+spec:
+  containers:
+  - name: my-container
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "100m"
+      limits:
+        memory: "200Mi"
+        cpu: "200m"
+    image: mediawiki
+##    command: ["/bin/sh", "-c", "cat /etc/csv/myfile.csv"]
+#    volumeMounts:
+#    - name: csv-volume
+#      mountPath: /etc/csv
+#  volumes:
+#  - name: csv-volume
+#    configMap:
+#      name: my-csv-file
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-c
+spec:
+  containers:
+  - name: my-container
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "100m"
+      limits:
+        memory: "200Mi"
+        cpu: "200m"
+    image: mediawiki
+##    command: ["/bin/sh", "-c", "cat /etc/csv/myfile.csv"]
+#    volumeMounts:
+#    - name: csv-volume
+#      mountPath: /etc/csv
+#  volumes:
+#  - name: csv-volume
+#    configMap:
+#      name: my-csv-file
