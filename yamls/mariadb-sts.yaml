@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: mariadb
-  serviceName: mariadb-headless
+  serviceName: mariadb
   replicas: 1
   template:
     metadata:
@@ -14,37 +14,42 @@ spec:
         app: mariadb
     spec:
       initContainers:
-      - name: init-restore-db
-        image: busybox
-        command: ["/bin/sh", "-c", "curl -L -o /var/lib/mysql/database.sql https://drive.google.com/file/d/<file-id>/view?usp=sharing"]
-        volumeMounts:
-        - name: mariadb-data
-          mountPath: /var/lib/mysql
-      containers:
-      - name: mariadb
-        image: mariadb:latest
+      - name: download-backup
+        image: alpine:3.12
+        command:
+        - sh
+        - -c
+        - |
+          set -x
+          apk add --no-cache curl
+          curl -L -o mediawiki.sql  "https://drive.google.com/uc?export=download&id=1pnan6QBDVM4MsRVJC3KRZvfBBiDGAgOj"
+          mysql -u root -p$MYSQL_ROOT_PASSWORD < mediawiki.sql
         env:
         - name: MYSQL_ROOT_PASSWORD
-          value: password
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-root-password
+              key: MYSQL_ROOT_PASSWORD
+      containers:
+      - name: mariadb
+        image: mariadb:10.5
         ports:
-        - containerPort: 3306
+        - name: mysql
+          containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-root-password
+              key: MYSQL_ROOT_PASSWORD
         volumeMounts:
         - name: mariadb-data
           mountPath: /var/lib/mysql
-        readinessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - 'mysqladmin ping --silent'
-      securityContext:
-        runAsUser: 999
   volumeClaimTemplates:
   - metadata:
       name: mariadb-data
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: gp2
       resources:
         requests:
-          storage: 5Gi
+          storage: 1Gi

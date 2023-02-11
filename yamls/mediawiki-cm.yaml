@@ -36,7 +36,7 @@ data:
     $wgScriptPath = "";
 
     ## The protocol and server name to use in fully-qualified URLs
-    $wgServer = "http://localhost:55001";
+    $wgServer = "http://localhost:8081";
 
     ## The URL path to static resources (images, scripts, etc.)
     $wgResourceBasePath = $wgScriptPath;
