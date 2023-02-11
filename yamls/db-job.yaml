@@ -9,17 +9,17 @@ spec:
     spec:
       containers:
       - name: backup-restore
-        image: mariadb:10.5
+        image: mariadb
         command:
         - sh
         - -c
         - |
-          until mysqladmin ping -h localhost -u root -p$MARIADB_ROOT_PASSWORD --silent; do
+          until mysqladmin ping -h mariadb-service -u root -p$MARIADB_ROOT_PASSWORD --silent; do
             echo "Waiting for MariaDB to start..."
             sleep 5
           done
           curl -L -o mediawiki.sql "https://drive.google.com/uc?export=download&id=1pnan6QBDVM4MsRVJC3KRZvfBBiDGAgOj"
-          mysql -h localhost -u root -p $MARIADB_ROOT_PASSWORD < mediawiki.sql
+          mysql -h mariadb-service -u root -p $MARIADB_ROOT_PASSWORD < mediawiki.sql
         env:
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:
