@@ -63,7 +63,7 @@ data:
 
     ## Database settings
     $wgDBtype = "mysql";
-    $wgDBserver = "172.17.0.3";
+    $wgDBserver = "mariadb-service";
     $wgDBname = "mediawiki";
     $wgDBuser = "root";
     $wgDBpassword = "password";
