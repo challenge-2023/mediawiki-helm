@@ -46,6 +46,19 @@ spec:
         volumeMounts:
         - name: mariadb-data
           mountPath: /var/lib/mysql
+      - name: backup-restore
+        image: busybox
+        command:
+        - sh
+        - -c
+        - |
+          apk add --no-cache curl mysql-client
+          until mysqladmin ping -h localhost --silent; do
+            echo "Waiting for MariaDB to start..."
+            sleep 5
+          done
+          curl -L -o mediawiki.sql  "https://drive.google.com/uc?export=download&id=1pnan6QBDVM4MsRVJC3KRZvfBBiDGAgOj"
+          mysql -h localhost -u root -p$MYSQL_ROOT_PASSWORD < mediawiki.sql
   volumeClaimTemplates:
   - metadata:
       name: mariadb-data
