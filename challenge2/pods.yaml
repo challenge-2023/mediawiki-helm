@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+  - name: my-container
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "100m"
+      limits:
+        memory: "400Mi"
+        cpu: "200m"
+    image: busybox
+    command: ["/bin/sh", "-c", "cat /etc/csv/myfile.csv"]
+    volumeMounts:
+    - name: csv-volume
+      mountPath: /etc/csv
+  volumes:
+  - name: csv-volume
+    configMap:
+      name: my-csv-file
