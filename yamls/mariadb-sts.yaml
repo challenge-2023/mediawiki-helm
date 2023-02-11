@@ -28,6 +28,14 @@ spec:
         volumeMounts:
         - name: mariadb-data
           mountPath: /var/lib/mysql
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "mysql -u root -p$MYSQL_ROOT_PASSWORD -e 'SHOW DATABASES'"
+          initialDelaySeconds: 30
+          periodSeconds: 10
   volumeClaimTemplates:
   - metadata:
       name: mariadb-data
