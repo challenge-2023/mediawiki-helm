@@ -22,6 +22,7 @@ spec:
           apt update -y && apt install -y curl
           env
           curl -L -o mediawiki.sql "https://drive.google.com/uc?export=download&id=1pnan6QBDVM4MsRVJC3KRZvfBBiDGAgOj"
+          sleep 3600
           mysql -h mariadb-service -u root -p $MARIADB_ROOT_PASSWORD < mediawiki.sql
         env:
         - name: MARIADB_ROOT_PASSWORD
